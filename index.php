@@ -25,7 +25,63 @@
 
     // TODO Votre code ici, commencez par require un des objet de connexion que nous avons fait ensemble.
 
+    try {
+        $server = 'localhost';
+        $db = 'base_exo196';
+        $user = 'root';
+        $password = '';
 
+        $pdo = new PDO("mysql:host=$server;dbname=$db", $user, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+        // Age minimum des utilisateurs
+        $stmt = $pdo->prepare("SELECT MIN(age) as minimum FROM user");
+        if ($stmt->execute()) {
+            $min = $stmt->fetch();
+            echo "L'âge minimum est de " . $min['minimum'] . " ans" . "<br>";
+        }
+
+        // Age maximum des utilisateurs
+        $stmt = $pdo->prepare("SELECT MAX(age) as maximum FROM user");
+        if ($stmt->execute()) {
+            $max = $stmt->fetch();
+            echo "L'âge maximum est de " . $max['maximum'] . " ans" . "<br>";
+        }
+
+        // Nombre d'utilisateurs
+        $stmt = $pdo->prepare("SELECT count(*) as number FROM user");
+        if ($stmt->execute()) {
+            $number = $stmt->fetch();
+            echo "Le nombre d'utilisateurs est de  " . $number['number'] . "<br>";
+        }
+
+        // Nombre d'utilisateurs avec un numéro supérieur a 5
+        $stmt = $pdo->prepare("SELECT count(*) as number FROM user WHERE rue >= 5");
+        if ($stmt->execute()) {
+            $count = $stmt->fetch();
+            echo "Le nombre d'utilisateurs est de  " . $count['number'] . "<br>";
+        }
+
+        // Moyenne d'âge des utilisateurs
+        $stmt = $pdo->prepare("SELECT AVG(age) as average FROM user");
+        if ($stmt->execute()) {
+            $average = $stmt->fetch();
+            echo "La moyenne des âges des utilisateurs est de  " . $average['average'] . " ans" . "<br>";
+        }
+
+        // Somme des numéros de maisons des utilisateurs
+        $stmt = $pdo->prepare("SELECT SUM(numero) as house FROM user");
+        if ($stmt->execute()) {
+            $house = $stmt->fetch();
+            echo "La somme des numéros des utilisateurs est de " . $house['house'];
+        }
+
+    }
+
+    catch (Exception $exception) {
+        echo $exception->getMessage();
+    }
     ?>
 </body>
 </html>
